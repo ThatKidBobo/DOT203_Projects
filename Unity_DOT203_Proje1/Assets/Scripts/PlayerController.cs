@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 1.0f;
+    [SerializeField] private int moveSpeed = 1;
     private Vector3 _startPosition;
 
     private void Start()

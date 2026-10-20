@@ -32,8 +32,14 @@ public class CommandInvoker : MonoBehaviour
     {
         if (UndoStack.Count > 0)
         {
-            ICommand command = UndoStack.Pop();
-            command.Undo();
+            var command = UndoStack.Pop();
+            command?.Undo();
+
+            var commandIndex = CommandHistory.LastIndexOf(command);
+            if(commandIndex >= 0)
+            {
+                CommandHistory.RemoveAt(commandIndex);
+            }
         }
     }
 
@@ -45,11 +51,13 @@ public class CommandInvoker : MonoBehaviour
     private IEnumerator ReplayRoutine(Transform targetTransform, Vector3 startPosition)
     {
         targetTransform.position = startPosition;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         foreach (ICommand command in CommandHistory)
         {
-            command.Execute();
-            yield return new WaitForSeconds(1f);
+            command?.Execute();
+            yield return new WaitForSeconds(0.3f);
         }
+
+        CommandHistory.Clear();
     }
 }
